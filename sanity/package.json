@@ -1,0 +1,23 @@
+{
+  "name": "xs-ecommerce-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sanity Studio for xs-ecommerce — deployed independently of the storefront.",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@sanity/vision": "^3.62.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sanity": "^3.62.0",
+    "styled-components": "^6.1.13"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^5.6.3"
+  }
+}
