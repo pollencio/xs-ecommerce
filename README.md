@@ -47,23 +47,22 @@ Copia el `projectId` que te da Sanity a **ambos** archivos de entorno:
 - `sanity/.env` (o `.env.example` como referencia) → `SANITY_STUDIO_PROJECT_ID`
 - `.env.local` (raíz del proyecto) → `NEXT_PUBLIC_SANITY_PROJECT_ID`
 
-### 3. Correr el Studio y cargar contenido
+### 3. Desplegar el Studio en Sanity Cloud
 
 ```bash
 cd sanity
-npm run dev
-```
-
-Abre el Studio local (`http://localhost:3333`), completa **Configuración del
-sitio** (nombre, número de WhatsApp, contacto) y **Página de inicio**, y carga
-algunas categorías, productos y artículos del blog.
-
-Cuando el contenido esté listo, despliega el Studio de forma independiente (queda
-alojado en Sanity, no en tu app de Next.js):
-
-```bash
 npm run deploy
 ```
+
+Esto publica el Studio como una app alojada por Sanity (algo como
+`https://tu-proyecto.sanity.studio`) — **no** corre en tu máquina ni en ningún
+servidor propio. Todo el equipo edita el contenido ahí, desde el navegador.
+`npm run dev` (Studio local) es solo para probar un cambio de esquema antes de
+desplegarlo de nuevo con `npm run deploy`; no es parte del flujo normal de trabajo.
+
+Abre la URL que te dio el deploy, completa **Configuración del sitio** (nombre,
+número de WhatsApp, contacto) y **Página de inicio**, y carga algunas categorías,
+productos y artículos del blog.
 
 ### 4. Desplegar la tienda en Vercel
 
@@ -95,8 +94,10 @@ con la tienda.
 - **blogCategory** — categorías del blog.
 - **post** — artículos del blog (Portable Text), con categoría, autor y SEO.
 
-Los esquemas están en `sanity/schemas/` y son la fuente de verdad del modelo de
-contenido — versionados junto con el código aunque el Studio se despliegue aparte.
+Los esquemas están en `sanity/schemas/` y son la **fuente de verdad** del modelo
+de contenido — viven en el código y viajan con el repo, aunque el Studio en sí
+se despliegue por separado en la nube de Sanity. Un cambio de esquema se edita
+acá, se prueba con `npm run dev` si hace falta, y se publica con `npm run deploy`.
 
 ## Cómo rebautizar (re-skin) la tienda para un cliente nuevo
 
@@ -104,7 +105,8 @@ contenido — versionados junto con el código aunque el Studio se despliegue ap
    `--background`, etc. en formato HSL) y el radio de bordes en `--radius`.
 2. **Tipografías**: cambia las fuentes importadas en `app/layout.tsx` (`next/font/google`).
 3. **Contenido**: todo lo demás (nombre, logo, copys, productos, blog) se edita en
-   el Studio de Sanity — no requiere tocar código ni volver a desplegar el Studio.
+   el Studio de Sanity alojado en la nube (`https://tu-proyecto.sanity.studio`) —
+   no requiere tocar código ni volver a desplegar nada.
 4. **WhatsApp**: el número vive en `siteSettings.whatsappNumber` — un solo lugar.
 
 ## Dónde está cada cosa (arquitectura)
@@ -120,6 +122,10 @@ contenido — versionados junto con el código aunque el Studio se despliegue ap
 - `components/store/`, `components/blog/`, `components/cart/`, `components/sections/`,
   `components/layout/` — componentes de dominio, organizados por área.
 - `sanity/` — esquemas y configuración del Studio, con su propio `package.json`.
+  Es la fuente de verdad del modelo de contenido, pero no corre junto a la
+  tienda: se publica una vez (y cada vez que cambia un esquema) con
+  `npm run deploy`, y desde ahí vive alojado por Sanity. La tienda de Next.js
+  nunca ejecuta ni embebe el Studio — solo lee datos de la API cloud de Sanity.
 
 ## Scripts
 
@@ -138,5 +144,9 @@ npm run typecheck      # TypeScript sin emitir
 - Si un cliente necesita guardar pedidos en el futuro, `lib/sanity/` y
   `lib/cart/store.ts` son los únicos puntos de integración — se puede agregar un
   backend ahí sin tocar la UI.
-- El Studio de Sanity nunca se embebe en la tienda: se despliega por separado con
-  `npm run deploy` dentro de `sanity/`.
+- El Studio de Sanity nunca se embebe en la tienda ni corre en un servidor propio:
+  se despliega una vez con `npm run deploy` dentro de `sanity/` y queda alojado
+  por Sanity Cloud. La tienda de Next.js solo consume esa API cloud — nunca hay
+  un cliente de Sanity corriendo localmente ni desplegado en infraestructura del
+  desarrollador. Los esquemas en `sanity/schemas/` son la fuente de verdad del
+  modelo de contenido.
