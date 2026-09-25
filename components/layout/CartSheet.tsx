@@ -40,7 +40,7 @@ export function CartSheet({ whatsappNumber }: { whatsappNumber: string }) {
           <>
             <div className="flex-1 divide-y divide-border overflow-y-auto">
               {items.map((item) => (
-                <CartLineItem key={item.productId} item={item} />
+                <CartLineItem key={item.lineId} item={item} />
               ))}
             </div>
 

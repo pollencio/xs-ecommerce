@@ -6,10 +6,12 @@ import { Minus, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 import { useCartStore, type CartItem } from "@/lib/cart/store";
+import { formatVariantLabel } from "@/lib/products/variants";
 
 export function CartLineItem({ item }: { item: CartItem }) {
   const setQuantity = useCartStore((s) => s.setQuantity);
   const remove = useCartStore((s) => s.remove);
+  const variantLabel = formatVariantLabel(item.size, item.color, item.sizeLabel);
 
   return (
     <div className="flex gap-3 py-3">
@@ -30,13 +32,17 @@ export function CartLineItem({ item }: { item: CartItem }) {
           <p className="text-sm font-medium leading-tight">{item.name}</p>
           <button
             type="button"
-            onClick={() => remove(item.productId)}
+            onClick={() => remove(item.lineId)}
             className="text-muted-foreground hover:text-foreground"
             aria-label={`Quitar ${item.name} del carrito`}
           >
             <X className="h-4 w-4" />
           </button>
         </div>
+
+        {variantLabel ? (
+          <p className="text-xs text-muted-foreground">{variantLabel}</p>
+        ) : null}
 
         <p className="text-sm text-muted-foreground">{formatPrice(item.price)}</p>
 
@@ -45,7 +51,7 @@ export function CartLineItem({ item }: { item: CartItem }) {
             variant="outline"
             size="icon"
             className="h-7 w-7"
-            onClick={() => setQuantity(item.productId, item.quantity - 1)}
+            onClick={() => setQuantity(item.lineId, item.quantity - 1)}
             aria-label="Disminuir cantidad"
           >
             <Minus className="h-3 w-3" />
@@ -55,7 +61,7 @@ export function CartLineItem({ item }: { item: CartItem }) {
             variant="outline"
             size="icon"
             className="h-7 w-7"
-            onClick={() => setQuantity(item.productId, item.quantity + 1)}
+            onClick={() => setQuantity(item.lineId, item.quantity + 1)}
             aria-label="Aumentar cantidad"
           >
             <Plus className="h-3 w-3" />

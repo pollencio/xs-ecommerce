@@ -93,6 +93,10 @@ con la tienda.
 - **promoBanner** — banner promocional de la tienda (se muestra el más reciente activo).
 - **category** — categorías de producto.
 - **product** — nombre, imágenes, precio, descripción, categoría, stock, destacado, SEO.
+  Variantes opcionales: **tallas** (nombre, precio propio opcional, imagen propia
+  opcional — solo la talla puede tener precio distinto al del producto) y
+  **colores** (nombre, color con selector visual opcional, imagen propia
+  opcional). Ambas son independientes entre sí.
 - **blogCategory** — categorías del blog.
 - **post** — artículos del blog (Portable Text), con categoría, autor y SEO.
 

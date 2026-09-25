@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { ProductGallery } from "@/components/store/ProductGallery";
-import { AddToCartButton } from "@/components/store/AddToCartButton";
-import { PortableTextRenderer } from "@/components/blog/PortableTextRenderer";
-import { Badge } from "@/components/ui/badge";
+import { ProductPurchase } from "@/components/store/ProductPurchase";
 import {
   getProductBySlug,
   getProductSlugs,
@@ -12,6 +9,7 @@ import {
 } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import { formatPrice } from "@/lib/format";
+import { priceRange } from "@/lib/products/variants";
 import { breadcrumbJsonLd, buildMetadata, productJsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
@@ -62,10 +60,6 @@ export default async function ProductPage({
 
   if (!product) notFound();
 
-  const hasDiscount =
-    typeof product.compareAtPrice === "number" &&
-    product.compareAtPrice > product.price;
-
   const jsonLdImage = product.images?.[0]
     ? urlFor(product.images[0]).width(1200).height(1200).url()
     : undefined;
@@ -81,6 +75,7 @@ export default async function ProductPage({
               description: product.seo?.metaDescription,
               image: jsonLdImage,
               price: product.price,
+              priceRange: priceRange(product),
               slug: product.slug.current,
               inStock: product.inStock,
             })
@@ -99,55 +94,7 @@ export default async function ProductPage({
         }}
       />
 
-      <div className="grid gap-10 lg:grid-cols-2">
-        <ProductGallery images={product.images} productName={product.name} />
-
-        <div className="flex flex-col gap-4">
-          {product.category ? (
-            <p className="text-sm text-muted-foreground">
-              {product.category.name}
-            </p>
-          ) : null}
-
-          <h1 className="font-display text-3xl font-bold">{product.name}</h1>
-
-          <div className="flex items-center gap-3">
-            {!product.inStock ? (
-              <Badge variant="secondary">Agotado</Badge>
-            ) : null}
-            {hasDiscount ? <Badge variant="destructive">Oferta</Badge> : null}
-          </div>
-
-          <div className="flex items-baseline gap-3">
-            <span className="text-2xl font-semibold">
-              {formatPrice(product.price)}
-            </span>
-            {hasDiscount ? (
-              <span className="text-lg text-muted-foreground line-through">
-                {formatPrice(product.compareAtPrice!)}
-              </span>
-            ) : null}
-          </div>
-
-          <AddToCartButton product={product} size="lg" className="mt-2 w-full sm:w-auto" />
-
-          {product.description ? (
-            <div className="mt-4">
-              <PortableTextRenderer value={product.description} />
-            </div>
-          ) : null}
-
-          {product.tags && product.tags.length > 0 ? (
-            <div className="mt-2 flex flex-wrap gap-2">
-              {product.tags.map((tag) => (
-                <Badge key={tag} variant="outline">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      </div>
+      <ProductPurchase product={product} />
     </div>
   );
 }

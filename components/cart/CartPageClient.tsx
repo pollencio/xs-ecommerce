@@ -29,7 +29,7 @@ export function CartPageClient({ whatsappNumber }: { whatsappNumber: string }) {
     <div className="grid gap-10 lg:grid-cols-3">
       <div className="divide-y divide-border lg:col-span-2">
         {items.map((item) => (
-          <CartLineItem key={item.productId} item={item} />
+          <CartLineItem key={item.lineId} item={item} />
         ))}
       </div>
 

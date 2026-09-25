@@ -36,6 +36,9 @@ const productFragment = /* groq */ `
   featured,
   inStock,
   _createdAt,
+  sizeLabel,
+  sizes[]{ _key, name, price, image },
+  colors[]{ _key, name, "hex": color.hex, image },
   ${seoFragment}
 `;
 

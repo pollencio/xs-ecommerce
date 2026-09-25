@@ -10,11 +10,18 @@ import type { SanityImage } from "@/lib/sanity/types";
 export function ProductGallery({
   images,
   productName,
+  activeIndex,
+  onActiveIndexChange,
 }: {
   images: SanityImage[];
   productName: string;
+  /** Omit both to let the gallery manage its own selection (default). */
+  activeIndex?: number;
+  onActiveIndexChange?: (index: number) => void;
 }) {
-  const [active, setActive] = useState(0);
+  const [internalActive, setInternalActive] = useState(0);
+  const active = activeIndex ?? internalActive;
+  const setActive = onActiveIndexChange ?? setInternalActive;
   const current = images[active];
 
   return (

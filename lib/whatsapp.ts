@@ -1,5 +1,6 @@
 import type { CartItem } from "./cart/store";
 import { formatPrice } from "./format";
+import { formatVariantLabel } from "./products/variants";
 
 /**
  * There is no payment system: checkout hands the shopper off to WhatsApp
@@ -16,8 +17,10 @@ export function buildCheckoutMessage(items: CartItem[], siteUrl?: string) {
   const lines = items.map((item) => {
     const lineTotal = formatPrice(item.price * item.quantity);
     const link = siteUrl ? `${siteUrl}/tienda/${item.slug}` : undefined;
+    const variantLabel = formatVariantLabel(item.size, item.color, item.sizeLabel);
+    const name = variantLabel ? `${item.name} (${variantLabel})` : item.name;
     return [
-      `• ${item.name} x${item.quantity} — ${lineTotal}`,
+      `• ${name} x${item.quantity} — ${lineTotal}`,
       link ? `  ${link}` : null,
     ]
       .filter(Boolean)

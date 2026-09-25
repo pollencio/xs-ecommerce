@@ -64,6 +64,20 @@ export interface Category {
   image?: SanityImage;
 }
 
+export interface ProductSize {
+  _key: string;
+  name: string;
+  price?: number;
+  image?: SanityImage;
+}
+
+export interface ProductColor {
+  _key: string;
+  name: string;
+  hex?: string;
+  image?: SanityImage;
+}
+
 export interface Product {
   _id: string;
   name: string;
@@ -78,6 +92,9 @@ export interface Product {
   inStock: boolean;
   seo?: SeoFields;
   _createdAt: string;
+  sizeLabel?: string;
+  sizes?: ProductSize[];
+  colors?: ProductColor[];
 }
 
 export interface BlogCategory {

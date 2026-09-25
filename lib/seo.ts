@@ -87,24 +87,40 @@ export function productJsonLd(args: {
   description?: string;
   image?: string;
   price: number;
+  priceRange?: { min: number; max: number };
   slug: string;
   inStock: boolean;
 }) {
+  const url = `${siteUrl}/tienda/${args.slug}`;
+  const availability = args.inStock
+    ? "https://schema.org/InStock"
+    : "https://schema.org/OutOfStock";
+
+  const offers =
+    args.priceRange && args.priceRange.min !== args.priceRange.max
+      ? {
+          "@type": "AggregateOffer",
+          url,
+          priceCurrency: "USD",
+          lowPrice: args.priceRange.min,
+          highPrice: args.priceRange.max,
+          availability,
+        }
+      : {
+          "@type": "Offer",
+          url,
+          priceCurrency: "USD",
+          price: args.price,
+          availability,
+        };
+
   return {
     "@context": "https://schema.org",
     "@type": "Product",
     name: args.name,
     description: args.description,
     image: args.image,
-    offers: {
-      "@type": "Offer",
-      url: `${siteUrl}/tienda/${args.slug}`,
-      priceCurrency: "USD",
-      price: args.price,
-      availability: args.inStock
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-    },
+    offers,
   };
 }
 
