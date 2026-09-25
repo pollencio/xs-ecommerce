@@ -74,7 +74,6 @@ export default async function ProductPage({
     <div className="container py-10">
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             productJsonLd({
@@ -90,7 +89,6 @@ export default async function ProductPage({
       />
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             breadcrumbJsonLd([

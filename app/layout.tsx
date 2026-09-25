@@ -57,7 +57,6 @@ export default async function RootLayout({
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(
               organizationJsonLd({
