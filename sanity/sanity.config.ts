@@ -8,6 +8,12 @@ import { structure } from "./structure";
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID;
 const dataset = process.env.SANITY_STUDIO_DATASET || "production";
 
+if (!projectId) {
+  throw new Error(
+    "SANITY_STUDIO_PROJECT_ID is not set. Copy sanity/.env.example to sanity/.env and set it, or run `npx sanity init` to create a project."
+  );
+}
+
 export default defineConfig({
   name: "default",
   title: "xs-ecommerce",

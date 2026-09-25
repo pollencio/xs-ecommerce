@@ -21,7 +21,7 @@ bajo mantenimiento operativo para clientes que recién empiezan.
 
 ## Quickstart
 
-Requiere **Node 20.9+** (recomendado: Node 22, ver `.nvmrc`) y **npm 10+**.
+Requiere **Node 22.12+** (ver `.nvmrc`) y **npm 10+** — piso que marcan `@sanity/client` v8 y Sanity Studio v6.
 
 ### 1. Instalar y correr la tienda
 
